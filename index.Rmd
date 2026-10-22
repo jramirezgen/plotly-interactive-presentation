@@ -1,0 +1,56 @@
+---
+title: "Interactive Analysis with Plotly"
+author: "Developing Data Products - Week 3"
+date: "`r format(Sys.Date(), '%B %d, %Y')`"
+output: 
+  ioslides_presentation:
+    widescreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(plotly)
+library(datasets)
+```
+
+## Overview & Dataset
+
+- **Course Project:** Developing Data Products (Week 3 Assignment).
+- **Objective:** Build an interactive presentation using R Markdown and Plotly.
+- **Dataset:** `mtcars` (Motor Trend Car Road Tests).
+- **Interactive features:**
+  - Hover tooltip metrics.
+  - Multi-variable mapping (Weight, MPG, Horsepower, Cylinders).
+  - Zoom and pan capabilities.
+
+## Interactive Vehicle Analysis
+
+```{r plotly_chart}
+data(mtcars)
+mtcars$cyl <- as.factor(mtcars$cyl)
+
+plot_ly(
+  data = mtcars,
+  x = ~wt,
+  y = ~mpg,
+  type = "scatter",
+  mode = "markers",
+  color = ~cyl,
+  size = ~hp,
+  sizes = c(8, 24),
+  text = ~paste(
+    "Car:", rownames(mtcars),
+    "<br>MPG:", mpg,
+    "<br>Weight (1000 lbs):", wt,
+    "<br>HP:", hp,
+    "<br>Cylinders:", cyl
+  ),
+  hoverinfo = "text"
+) %>%
+  layout(
+    title = "Fuel Efficiency (MPG) vs Weight by Cylinders",
+    xaxis = list(title = "Weight (1,000 lbs)"),
+    yaxis = list(title = "Miles Per Gallon (MPG)"),
+    legend = list(title = list(text = "<b>Cylinders</b>"))
+  )
+```
